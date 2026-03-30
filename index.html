@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>najceneje.si — primerjava cen živil in energentov</title>
+  <meta name="description" content="Primerjaj cene živil v Lidl, Mercator in Spar ter cene energentov v Sloveniji. Vedno aktualno.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="src/styles/main.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <span class="logo-mark">nč</span>
+        <span class="logo-text">najceneje<span class="logo-si">.si</span></span>
+      </div>
+      <nav class="nav">
+        <button class="nav-btn active" data-tab="zivila">🥦 Živila</button>
+        <button class="nav-btn" data-tab="energenti">⚡ Energenti</button>
+      </nav>
+      <div class="update-badge">
+        <span class="pulse"></span>
+        Posodobljeno danes
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="hero">
+      <div class="container">
+        <h1 class="hero-title">Kje je <em>najceneje</em> danes?</h1>
+        <p class="hero-sub">Primerjava cen živil in energentov v Sloveniji — vsak dan osveženo.</p>
+      </div>
+    </section>
+
+    <!-- TAB: ŽIVILA -->
+    <div id="tab-zivila" class="tab-content active">
+      <div class="container">
+        <div class="search-section">
+          <div class="search-wrap">
+            <input type="text" id="search-input" class="search-input" placeholder="Poišči artikel (mleko, kruh, jajca...)">
+            <button class="search-btn" onclick="searchItem()">Išči</button>
+          </div>
+          <div class="quick-tags" id="quick-tags"></div>
+        </div>
+
+        <div class="two-col">
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Moja košarica</h2>
+              <button class="clear-btn" onclick="clearBasket()">Počisti</button>
+            </div>
+            <div id="basket-list" class="basket-list"></div>
+            <div class="basket-empty" id="basket-empty">
+              Dodaj artikel z iskanjem zgoraj ↑
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Primerjava po trgovinah</h2>
+            </div>
+            <div id="compare-table" class="compare-table-wrap"></div>
+            <div class="basket-empty" id="compare-empty">
+              Dodaj artiklе v košarico za primerjavo
+            </div>
+          </div>
+        </div>
+
+        <div class="panel history-panel">
+          <div class="panel-header">
+            <h2>Zgodovina cen — <span id="history-label">mleko 1L</span></h2>
+            <div class="store-toggles" id="store-toggles"></div>
+          </div>
+          <canvas id="price-chart" height="120"></canvas>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><h2>Teden akcij</h2></div>
+          <div class="deals-grid" id="deals-grid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: ENERGENTI -->
+    <div id="tab-energenti" class="tab-content">
+      <div class="container">
+        <div class="energy-tabs">
+          <button class="etab active" data-etab="gorivo">⛽ Gorivo</button>
+          <button class="etab" data-etab="elektrika">💡 Elektrika</button>
+          <button class="etab" data-etab="plin">🔥 Plin</button>
+          <button class="etab" data-etab="kurilno">🛢️ Kurilno olje</button>
+        </div>
+
+        <div id="etab-gorivo" class="etab-content active">
+          <div class="fuel-prices" id="fuel-prices"></div>
+          <div class="panel history-panel" style="margin-top:16px">
+            <div class="panel-header">
+              <h2>Gibanje cen goriva</h2>
+              <span class="regulated-badge">Regulirano</span>
+            </div>
+            <canvas id="fuel-chart" height="120"></canvas>
+          </div>
+        </div>
+
+        <div id="etab-elektrika" class="etab-content">
+          <div class="energy-intro">
+            <p>Primerjava tarifnih paketov za gospodinjstva. Cene so brez DDV, za povprečno porabo <strong>3.500 kWh/leto</strong>.</p>
+          </div>
+          <div id="elektrika-table" class="energy-table-wrap"></div>
+          <div class="calc-panel panel" style="margin-top:16px">
+            <div class="panel-header"><h2>Kalkulator prihrankov</h2></div>
+            <div class="calc-body">
+              <label>Vaša letna poraba (kWh)</label>
+              <div class="calc-row">
+                <input type="number" id="kwh-input" value="3500" class="calc-input">
+                <button class="search-btn" onclick="calcElektrika()">Izračunaj</button>
+              </div>
+              <div id="calc-result" class="calc-result"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="etab-plin" class="etab-content">
+          <div class="energy-intro">
+            <p>Primerjava ponudnikov zemeljskega plina za gospodinjstva.</p>
+          </div>
+          <div id="plin-table" class="energy-table-wrap"></div>
+        </div>
+
+        <div id="etab-kurilno" class="etab-content">
+          <div class="fuel-prices" id="kurilno-prices"></div>
+          <div class="panel history-panel" style="margin-top:16px">
+            <div class="panel-header"><h2>Gibanje cene kurilnega olja</h2></div>
+            <canvas id="kurilno-chart" height="120"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>najceneje.si — podatki se osvežujejo vsak dan. Cene so informativne narave.</p>
+      <p>Vir: Mercator, Spar, Lidl, goriva.si, ponudniki energije | <a href="#">O projektu</a></p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="src/data/zivila.js"></script>
+  <script src="src/data/energenti.js"></script>
+  <script src="src/components/app.js"></script>
+</body>
+</html>
